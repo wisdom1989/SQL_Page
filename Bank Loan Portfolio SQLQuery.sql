@@ -34,38 +34,44 @@ from financial_loan
 where MONTH(issue_date) = 11 and YEAR(issue_date) = 2021;
 
 
---
-select SUM(total_payment) as Total_Amount_Received from financial_loan;
+-- Total amount received
+select SUM(total_payment) as Total_Amount_Received 
+from financial_loan;
 
--- 
+-- MTD Total amount received
 select SUM(total_payment) as MTD_Total_Amount_Received 
 from financial_loan
 where MONTH(issue_date) = 12 and YEAR(issue_date) = 2021;
 
---
+-- PMTD Total amount received
 select SUM(total_payment) as PMTD_Total_Amount_Received 
 from financial_loan
 where MONTH(issue_date) = 11 and YEAR(issue_date) = 2021;
 
---
+-- Average interest rate
 select round(AVG(int_rate), 4) * 100 as Avg_Interest_Rate 
 from financial_loan;
 
---
+-- MTD Average interest rate
 select round(AVG(int_rate), 4) * 100 as MTD_Avg_Interest_Rate 
 from financial_loan
 where MONTH(issue_date) = 12 and YEAR(issue_date) = 2021;
 
---
+-- PMTD Average interest rate
 select round(AVG(int_rate), 4) * 100 as PMTD_Avg_Interest_Rate 
 from financial_loan
 where MONTH(issue_date) = 11 and YEAR(issue_date) = 2021;
 
---
+-- Average debt-to-income ratio
 select round(AVG(dti),4) * 100 as Avg_Debt_To_Income
 from financial_loan;
 
---
+-- MTD Average debt-to-income ratio
+select round(AVG(dti),4) * 100 as MTD_Avg_Debt_To_Income
+from financial_loan
+where MONTH(issue_date) = 12 and YEAR(issue_date) = 2021;
+
+-- PMTD Average debt-to-income ratio
 select round(AVG(dti),4) * 100 as PMTD_Avg_Debt_To_Income
 from financial_loan
 where MONTH(issue_date) = 11 and YEAR(issue_date) = 2021;
@@ -116,7 +122,7 @@ where loan_status = 'Charged Off';
 
 
 
--- Loan status 1
+-- Loan status grid view 1
 select 
 loan_status,
 COUNT(id) as Total_loan_applications,
@@ -127,7 +133,7 @@ round(AVG(dti * 100),2) as DTI
 from financial_loan
 group by loan_status;
 
--- Loan Status 2
+-- Loan Status grid view MTD
 select
 loan_status,
 SUM(total_payment) as MTD_total_amount_received,
@@ -137,8 +143,6 @@ where MONTH(issue_date) = 12
 group by loan_status;
 
 /*_________________________________________________________________________________________________*/
-
-select * from financial_loan;
 
 --  Monthly trends by issue date
 select 
@@ -151,8 +155,7 @@ from financial_loan
 group by MONTH(issue_date), DATENAME(MONTH, issue_date)
 order by MONTH(issue_date);
 
--- Regional analysis by state
- 
+-- Regional analysis by state 
  select 
 address_state,
 count(id) as Total_loan_applications,
@@ -203,3 +206,16 @@ group by home_ownership
 order by count(id) desc;
 
 /*_________________________________________________________________________________________________*/
+
+-- Grid view of key loan-related matrix
+select 
+id,
+purpose,
+home_ownership,
+grade,
+issue_date,
+loan_amount,
+int_rate,
+installment,
+total_payment
+from financial_loan;
